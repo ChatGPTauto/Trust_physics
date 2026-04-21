@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>演讲稿 · 信任物理学 · 提案版</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=DM+Mono:wght@400;500&family=Noto+Serif+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #faf7f2;
+  --surface: #f4f0e8;
+  --ink: #0e0c0a;
+  --ink-dim: #5a5448;
+  --ink-muted: #9a9080;
+  --border: rgba(14,12,10,0.1);
+  --amber: #b87c08;
+  --amber-bg: rgba(184,124,8,0.07);
+  --red: #8b2020;
+  --red-bg: rgba(139,32,32,0.06);
+  --green: #1e5c38;
+  --green-bg: rgba(30,92,56,0.06);
+  --sidebar-w: 240px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Noto Serif SC', serif;
+  display: flex;
+  min-height: 100vh;
+}
+
+/* grid texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 36px 36px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--ink);
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  overflow-y: auto;
+  padding: 36px 0 40px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.sb-head {
+  padding: 0 24px 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 24px;
+}
+
+.sb-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 8px;
+}
+
+.sb-title {
+  font-family: 'EB Garamond', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.35;
+}
+
+.sb-subtitle {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 1px;
+  margin-top: 6px;
+}
+
+/* Timer */
+.sb-timer {
+  padding: 0 24px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 20px;
+}
+
+.timer-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.timer-display {
+  font-family: 'DM Mono', monospace;
+  font-size: 22px;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.timer-bar {
+  height: 2px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.timer-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--amber);
+  transition: width 1s linear, background 0.5s;
+}
+
+.timer-hint {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 1px;
+}
+
+.timer-btn {
+  margin-top: 10px;
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.5);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.timer-btn:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); }
+.timer-btn.running { background: var(--amber); color: #fff; border-color: var(--amber); }
+
+/* Nav */
+.sb-section-label {
+  padding: 0 24px 6px;
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 24px;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: all 0.15s;
+}
+
+.nav-item:hover { background: rgba(255,255,255,0.04); }
+
+.nav-item.active {
+  background: rgba(184,124,8,0.12);
+  border-left-color: var(--amber);
+}
+
+.nav-index {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: rgba(255,255,255,0.2);
+  min-width: 16px;
+}
+
+.nav-item.active .nav-index { color: var(--amber); }
+
+.nav-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.35);
+  line-height: 1.3;
+  flex: 1;
+}
+
+.nav-item.active .nav-label { color: rgba(255,255,255,0.8); }
+
+.nav-t {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: rgba(255,255,255,0.15);
+}
+
+/* ── MAIN ── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  max-width: 780px;
+  padding: 64px 72px 120px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── SECTION ── */
+.section {
+  margin-bottom: 80px;
+  padding-bottom: 80px;
+  border-bottom: 1px solid var(--border);
+  scroll-margin-top: 48px;
+}
+
+.section:last-child { border-bottom: none; margin-bottom: 0; }
+
+.sec-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.sec-index {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-muted);
+  letter-spacing: 1px;
+  min-width: 24px;
+}
+
+.sec-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  padding: 3px 9px;
+  border: 1px solid var(--border);
+}
+
+.sec-time {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--amber);
+  padding: 3px 9px;
+  background: var(--amber-bg);
+  border: 1px solid rgba(184,124,8,0.2);
+}
+
+.sec-title {
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(22px, 3vw, 36px);
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 6px;
+  color: var(--ink);
+}
+
+.sec-title em { font-style: italic; color: var(--amber); }
+
+.sec-en {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 32px;
+}
+
+/* ── SPEECH BODY ── */
+.speech {
+  font-size: 15px;
+  line-height: 2.1;
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+
+.speech strong { font-weight: 600; }
+.speech .hl { color: var(--amber); font-weight: 500; }
+.speech .hl-r { color: var(--red); }
+.speech .hl-g { color: var(--green); }
+
+/* Speaker note */
+.note {
+  background: rgba(14,12,10,0.03);
+  border: 1px dashed rgba(14,12,10,0.12);
+  border-left: 3px solid var(--ink-muted);
+  padding: 12px 16px;
+  margin: 18px 0;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-muted);
+  line-height: 1.7;
+}
+
+.note-label {
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  opacity: 0.6;
+  margin-bottom: 4px;
+}
+
+/* Pause */
+.pause {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+.pause::before, .pause::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Key line */
+.key-line {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: clamp(16px, 2.2vw, 22px);
+  line-height: 1.65;
+  border-left: 3px solid var(--amber);
+  padding: 14px 22px;
+  margin: 24px 0;
+  background: var(--amber-bg);
+  color: var(--ink);
+}
+
+/* Formula */
+.formula {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: clamp(17px, 2.5vw, 26px);
+  text-align: center;
+  padding: 24px 32px;
+  margin: 24px 0;
+  background: var(--ink);
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  position: relative;
+}
+
+.formula::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--amber);
+}
+
+.formula .f-hi { color: #e8a820; }
+.formula .f-dim { color: rgba(255,255,255,0.3); }
+
+/* Variable list */
+.var-list {
+  margin: 20px 0;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.var-row {
+  display: grid;
+  grid-template-columns: 48px 1fr 2fr;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+}
+
+.var-row:last-child { border-bottom: none; }
+
+.v-sym {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--amber);
+  padding: 12px 14px;
+  text-align: center;
+  background: var(--amber-bg);
+  border-right: 1px solid var(--border);
+  line-height: 1;
+}
+
+.v-name {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 12px 14px;
+  color: var(--ink);
+  border-right: 1px solid var(--border);
+  line-height: 1.5;
+}
+
+.v-note {
+  font-size: 12px;
+  padding: 12px 14px;
+  color: var(--ink-dim);
+  line-height: 1.6;
+}
+
+/* Contrast table */
+.contrast {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--border);
+  margin: 24px 0;
+  overflow: hidden;
+}
+
+.ct-col { padding: 20px 22px; }
+.ct-col:first-child {
+  border-right: 1px solid var(--border);
+  background: var(--red-bg);
+}
+.ct-col:last-child { background: var(--green-bg); }
+
+.ct-head {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ct-col:first-child .ct-head { color: var(--red); }
+.ct-col:last-child .ct-head { color: var(--green); }
+
+.ct-row {
+  display: flex;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--ink-dim);
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--border);
+  line-height: 1.6;
+  align-items: flex-start;
+}
+
+.ct-row:last-child { border-bottom: none; }
+
+.ct-mark {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.ct-col:first-child .ct-mark { color: var(--red); }
+.ct-col:last-child .ct-mark { color: var(--green); }
+
+/* Data callout */
+.data-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.data-row:last-child { border-bottom: none; }
+
+.data-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 22px;
+  color: var(--amber);
+  min-width: 72px;
+  line-height: 1;
+}
+
+.data-label {
+  font-size: 14px;
+  color: var(--ink-dim);
+  line-height: 1.6;
+}
+
+/* Priority list */
+.priority {
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin: 24px 0;
+}
+
+.pri-row {
+  display: grid;
+  grid-template-columns: 32px 36px 1fr 100px 120px;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  gap: 0;
+}
+
+.pri-row:last-child { border-bottom: none; }
+
+.pri-row.header {
+  background: var(--ink);
+}
+
+.pri-cell {
+  padding: 11px 14px;
+  font-size: 12px;
+  color: var(--ink-dim);
+  border-right: 1px solid var(--border);
+  line-height: 1.5;
+}
+
+.pri-cell:last-child { border-right: none; }
+
+.pri-row.header .pri-cell {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+
+.pri-rank {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--amber);
+  text-align: center;
+}
+
+.pri-var {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--amber);
+  text-align: center;
+  padding: 10px 0;
+}
+
+.bar-wrap { display: flex; align-items: center; gap: 8px; }
+.bar-bg { flex: 1; height: 4px; background: var(--border); max-width: 60px; }
+.bar-fg { height: 4px; background: var(--amber); }
+.bar-val { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--ink-muted); }
+
+@media print {
+  .sidebar { display: none; }
+  .main { margin-left: 0; padding: 40px 48px; }
+  body::before { display: none; }
+}
+
+@media (max-width: 700px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; padding: 32px 20px 80px; }
+  .contrast { grid-template-columns: 1fr; }
+  .ct-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+  .pri-row { grid-template-columns: 28px 30px 1fr; }
+  .pri-cell:nth-child(4), .pri-cell:nth-child(5) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sb-head">
+    <div class="sb-eyebrow">提案演讲稿 · Pitch Deck Speech</div>
+    <div class="sb-title">信任物理学<br>Trust Physics</div>
+    <div class="sb-subtitle">客户提案版 · 理性严谨</div>
+  </div>
+
+  <div class="sb-timer">
+    <div class="timer-label">演讲计时</div>
+    <div class="timer-display" id="timerDisplay">00:00</div>
+    <div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
+    <div class="timer-hint" id="timerHint">目标：18 分钟</div>
+    <button class="timer-btn" id="timerBtn" onclick="toggleTimer()">▶ 开始计时</button>
+  </div>
+
+  <div class="sb-section-label">演讲结构</div>
+  <div id="navList">
+    <div class="nav-item active" onclick="goTo('s0')">
+      <span class="nav-index">00</span>
+      <span class="nav-label">现状数据·开场</span>
+      <span class="nav-t">0′</span>
+    </div>
+    <div class="nav-item" onclick="goTo('s1')">
+      <span class="nav-index">01</span>
+      <span class="nav-label">问题的本质</span>
+      <span class="nav-t">3′</span>
+    </div>
+    <div class="nav-item" onclick="goTo('s2')">
+      <span class="nav-index">02</span>
+      <span class="nav-label">第一层·信任形成</span>
+      <span class="nav-t">6′</span>
+    </div>
+    <div class="nav-item" onclick="goTo('s3')">
+      <span class="nav-index">03</span>
+      <span class="nav-label">第二层·信息熵</span>
+      <span class="nav-t">10′</span>
+    </div>
+    <div class="nav-item" onclick="goTo('s4')">
+      <span class="nav-index">04</span>
+      <span class="nav-label">第三层·引力模型</span>
+      <span class="nav-t">13′</span>
+    </div>
+    <div class="nav-item" onclick="goTo('s5')">
+      <span class="nav-index">05</span>
+      <span class="nav-label">AI信任总方程</span>
+      <span class="nav-t">15′</span>
+    </div>
+    <div class="nav-item" onclick="goTo('s6')">
+      <span class="nav-index">06</span>
+      <span class="nav-label">执行优先级</span>
+      <span class="nav-t">17′</span>
+    </div>
+    <div class="nav-item" onclick="goTo('s7')">
+      <span class="nav-index">07</span>
+      <span class="nav-label">结论·下一步</span>
+      <span class="nav-t">19′</span>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- 00 开场 -->
+  <div class="section" id="s0">
+    <div class="sec-meta">
+      <span class="sec-index">00</span>
+      <span class="sec-tag">开场 · Opening</span>
+      <span class="sec-time">0:00 — 3:00</span>
+    </div>
+    <div class="sec-title">一组数据，<em>说明现状</em></div>
+    <div class="sec-en">THE NUMBERS DON'T LIE</div>
+
+    <div class="speech">
+      我先分享三组数据，不需要解读，数字本身已经足够清楚。
+    </div>
+
+    <div class="data-row">
+      <div class="data-num">68%</div>
+      <div class="data-label">消费者在做购买决策前，至少使用一次 AI 搜索或咨询。<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ink-muted);">来源：Salesforce State of the Connected Customer, 2024</span></div>
+    </div>
+    <div class="data-row">
+      <div class="data-num">3.2×</div>
+      <div class="data-label">AI 推荐的品牌，其转化率是普通搜索结果的 3.2 倍。<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ink-muted);">来源：GEO Research, Stanford NLP Group, 2024</span></div>
+    </div>
+    <div class="data-row">
+      <div class="data-num">&lt; 5%</div>
+      <div class="data-label">被 AI 主动引用的企业内容，低于全网内容总量的 5%。<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ink-muted);">来源：Anthropic Internal Analysis, 2024</span></div>
+    </div>
+
+    <div class="pause">— 停顿 —</div>
+
+    <div class="speech">
+      这意味着：<strong>95% 以上的品牌内容，AI 选择了忽略。</strong><br>
+      不是因为内容不够多，而是因为内容不够可信。
+    </div>
+
+    <div class="speech">
+      今天我们要解决的，就是这个问题——<br>
+      <strong>为什么 AI 引用某些内容而忽略另一些，以及，你能做什么。</strong>
+    </div>
+
+    <div class="note">
+      <div class="note-label">演讲者提示</div>
+      开场不要寒暄。直接用数据进入。客户是来看解决方案的，不是来听介绍的。
+    </div>
+  </div>
+
+  <!-- 01 问题本质 -->
+  <div class="section" id="s1">
+    <div class="sec-meta">
+      <span class="sec-index">01</span>
+      <span class="sec-tag">问题定义 · Problem</span>
+      <span class="sec-time">3:00 — 6:00</span>
+    </div>
+    <div class="sec-title">不是算法问题，<em>是信任问题</em></div>
+    <div class="sec-en">THE REAL DIAGNOSIS</div>
+
+    <div class="speech">
+      很多企业看到这组数据之后，第一反应是：<br>
+      「我们需要做更多 SEO」，或者「我们需要更多内容」。
+    </div>
+
+    <div class="speech">
+      这个判断方向是错的。
+    </div>
+
+    <div class="speech">
+      传统 SEO 的核心逻辑是：<strong>让搜索引擎看见你。</strong><br>
+      AI 推荐的核心逻辑是：<strong>让 AI 信任你。</strong>
+    </div>
+
+    <div class="speech">
+      这是两件完全不同的事。
+    </div>
+
+    <div class="contrast">
+      <div class="ct-col">
+        <div class="ct-head">传统 SEO 逻辑</div>
+        <div class="ct-row"><span class="ct-mark">—</span>关键词密度优化</div>
+        <div class="ct-row"><span class="ct-mark">—</span>外链数量堆积</div>
+        <div class="ct-row"><span class="ct-mark">—</span>内容量规模化生产</div>
+        <div class="ct-row"><span class="ct-mark">—</span>标题吸引点击率</div>
+        <div class="ct-row"><span class="ct-mark">—</span>页面停留时长</div>
+      </div>
+      <div class="ct-col">
+        <div class="ct-head">AI 引用逻辑（GEO）</div>
+        <div class="ct-row"><span class="ct-mark">+</span>内容可被验证的程度</div>
+        <div class="ct-row"><span class="ct-mark">+</span>信息熵（确定性）</div>
+        <div class="ct-row"><span class="ct-mark">+</span>权威来源的引用密度</div>
+        <div class="ct-row"><span class="ct-mark">+</span>营销偏置的高低</div>
+        <div class="ct-row"><span class="ct-mark">+</span>跨平台信任积累</div>
+      </div>
+    </div>
+
+    <div class="speech">
+      问题的本质是：<br>
+      AI 的训练目标，是帮用户找到<strong>最可信的答案</strong>，而不是最受欢迎的答案。<br>
+      它在做的事情，本质上是一个<strong>信任评分系统</strong>。
+    </div>
+
+    <div class="key-line">
+      你的竞争对手不是花了更多广告费的企业，<br>
+      而是建立了更高信任评分的企业。
+    </div>
+  </div>
+
+  <!-- 02 第一层 -->
+  <div class="section" id="s2">
+    <div class="sec-meta">
+      <span class="sec-index">02</span>
+      <span class="sec-tag">第一层 · STGP Model</span>
+      <span class="sec-time">6:00 — 10:00</span>
+    </div>
+    <div class="sec-title">信任如何形成——<em>STGP 模型</em></div>
+    <div class="sec-en">HOW TRUST IS COMPUTED · LAYER ONE</div>
+
+    <div class="speech">
+      我们把信任的形成拆解成一个可计算的公式。<br>
+      这是我们框架的第一层：
+    </div>
+
+    <div class="formula">
+      T <span class="f-dim">=</span> A <span class="f-dim">·</span> [1 − (1 − <span class="f-hi">D</span>)<sup><span class="f-hi">n</span></sup>] <span class="f-dim">·</span> e<sup class="f-dim">−P</sup>
+    </div>
+
+    <div class="var-list">
+      <div class="var-row">
+        <div class="v-sym">T</div>
+        <div class="v-name">综合信任值</div>
+        <div class="v-note">AI 对该内容来源的整体可信度评估</div>
+      </div>
+      <div class="var-row">
+        <div class="v-sym">A</div>
+        <div class="v-name">权威度</div>
+        <div class="v-note">行业专家身份、媒体背书、第三方引用密度</div>
+      </div>
+      <div class="var-row">
+        <div class="v-sym">D</div>
+        <div class="v-name">单次信任概率</div>
+        <div class="v-note">每次内容接触，AI 判定可信的概率（取决于内容质量）</div>
+      </div>
+      <div class="var-row">
+        <div class="v-sym">n</div>
+        <div class="v-name">接触次数</div>
+        <div class="v-note">该来源在训练数据中出现的频率与广度</div>
+      </div>
+      <div class="var-row">
+        <div class="v-sym">e<sup style="font-size:0.65em">−P</sup></div>
+        <div class="v-name">偏置惩罚项</div>
+        <div class="v-note">营销偏置越高，信任值以 e 为底数指数级衰减</div>
+      </div>
+    </div>
+
+    <div class="speech">
+      这个公式有两个关键洞察：
+    </div>
+
+    <div class="speech">
+      第一，<strong>[1−(1−D)ⁿ] 是一个累积函数。</strong><br>
+      即使单次信任概率 D 不高，只要接触次数 n 足够多，累积信任值会逐渐逼近 1。<br>
+      这解释了为什么持续输出真实内容的企业，信任积累是「复利式」的。
+    </div>
+
+    <div class="speech">
+      第二，<strong>e⁻ᴾ 是指数衰减。</strong><br>
+      当营销偏置 P = 1 时，信任打折 63%。<br>
+      当 P = 2 时，信任仅剩 14%。<br>
+      夸大宣传的代价，远比直觉想象的要大得多。
+    </div>
+
+    <div class="note">
+      <div class="note-label">演讲者提示</div>
+      此处可以直接问客户：「您目前的内容，大概有多少比例是有数据支撑的，多少是描述性语言？」——让对话进入。
+    </div>
+  </div>
+
+  <!-- 03 第二层 -->
+  <div class="section" id="s3">
+    <div class="sec-meta">
+      <span class="sec-index">03</span>
+      <span class="sec-tag">第二层 · Entropy Model</span>
+      <span class="sec-time">10:00 — 13:00</span>
+    </div>
+    <div class="sec-title">信息熵——<em>内容确定性的量化</em></div>
+    <div class="sec-en">INFORMATION ENTROPY · LAYER TWO</div>
+
+    <div class="speech">
+      第二层引入了信息论中的一个概念：<strong>信息熵 H。</strong>
+    </div>
+
+    <div class="speech">
+      信息熵衡量的是一段内容的「不确定性」。<br>
+      熵越高，内容越模糊、越难被验证；<br>
+      熵越低，内容越具体、越容易被 AI 引用。
+    </div>
+
+    <div class="speech">
+      两者的关系是：
+    </div>
+
+    <div class="formula">
+      Trust <span class="f-dim">∝</span> e<sup>−<span class="f-hi">H</span></sup> &nbsp;&nbsp;&nbsp; H <span class="f-dim">∝</span> P<sub style="font-size:0.6em" class="f-hi">bias</sub>
+    </div>
+
+    <div class="speech">
+      实操层面，高熵内容与低熵内容的区别非常具体：
+    </div>
+
+    <div class="contrast">
+      <div class="ct-col">
+        <div class="ct-head">高熵内容 · H↑ · AI 不引用</div>
+        <div class="ct-row"><span class="ct-mark">✕</span>「我们是行业领先的解决方案」</div>
+        <div class="ct-row"><span class="ct-mark">✕</span>「帮助客户大幅提升运营效率」</div>
+        <div class="ct-row"><span class="ct-mark">✕</span>「全球顶级品牌的战略合作伙伴」</div>
+        <div class="ct-row"><span class="ct-mark">✕</span>「专注于为企业创造价值」</div>
+      </div>
+      <div class="ct-col">
+        <div class="ct-head">低熵内容 · H↓ · AI 主动引用</div>
+        <div class="ct-row"><span class="ct-mark">✓</span>「客户库存周转天数从 68 天降至 41 天」</div>
+        <div class="ct-row"><span class="ct-mark">✓</span>「3 个月内获客成本下降 34%，样本量 N=47」</div>
+        <div class="ct-row"><span class="ct-mark">✓</span>「在 Gartner 2024 报告中被列为 Niche Player」</div>
+        <div class="ct-row"><span class="ct-mark">✓</span>「不适合年营收低于 5000 万的企业」</div>
+      </div>
+    </div>
+
+    <div class="speech">
+      注意最后一条：<strong>「不适合什么」的描述，是降低熵最有效的方法之一。</strong><br>
+      这句话表达了边界与诚实，在 AI 的判断体系里，得分极高。
+    </div>
+
+    <div class="key-line">
+      降低内容熵，不是在削弱品牌力。<br>
+      而是在建立 AI 无法忽视的信任信号。
+    </div>
+  </div>
+
+  <!-- 04 第三层 -->
+  <div class="section" id="s4">
+    <div class="sec-meta">
+      <span class="sec-index">04</span>
+      <span class="sec-tag">第三层 · GEO Gravity</span>
+      <span class="sec-time">13:00 — 15:00</span>
+    </div>
+    <div class="sec-title">信任引力——<em>AI 引用概率模型</em></div>
+    <div class="sec-en">GENERATIVE ENGINE OPTIMIZATION · LAYER THREE</div>
+
+    <div class="speech">
+      第三层，是整个框架最靠近业务结果的一层。
+    </div>
+
+    <div class="speech">
+      我们把「AI 引用你的概率」定义为<strong>信任引力 G</strong>，公式如下：
+    </div>
+
+    <div class="formula">
+      G <span class="f-dim">=</span> (S <span class="f-dim">×</span> T) <span class="f-dim">/</span> P<sub style="font-size:0.6em" class="f-hi">bias</sub>
+    </div>
+
+    <div class="var-list">
+      <div class="var-row">
+        <div class="v-sym">G</div>
+        <div class="v-name">信任引力</div>
+        <div class="v-note">AI 在相关查询中引用你内容的概率</div>
+      </div>
+      <div class="var-row">
+        <div class="v-sym">S</div>
+        <div class="v-name">信任资产规模</div>
+        <div class="v-note">可引用内容数量 × 质量权重（案例、数据、白皮书、引用记录）</div>
+      </div>
+      <div class="var-row">
+        <div class="v-sym">T</div>
+        <div class="v-name">综合信任值</div>
+        <div class="v-note">来自第一层 STGP 公式的输出</div>
+      </div>
+      <div class="var-row">
+        <div class="v-sym">P<sub style="font-size:0.65em">b</sub></div>
+        <div class="v-name">营销偏置（分母）</div>
+        <div class="v-note">P 在分母——P 越高，无论 S 和 T 多大，G 都被压低</div>
+      </div>
+    </div>
+
+    <div class="speech">
+      这个公式揭示了一个反直觉的结论：<br>
+      <strong>增加内容量（S↑）和增加广告投入，效果完全不同。</strong>
+    </div>
+
+    <div class="speech">
+      如果你同时提高了 S，但也在提高 P_bias，<br>
+      G 的净变化可能是零，甚至是负的。
+    </div>
+
+    <div class="key-line">
+      很多企业的问题不是内容不够多，<br>
+      而是内容里的偏置，把自己积累的信任资产抵消了。
+    </div>
+  </div>
+
+  <!-- 05 总方程 -->
+  <div class="section" id="s5">
+    <div class="sec-meta">
+      <span class="sec-index">05</span>
+      <span class="sec-tag">统一 · Master Equation</span>
+      <span class="sec-time">15:00 — 17:00</span>
+    </div>
+    <div class="sec-title"><em>AI 信任总方程</em></div>
+    <div class="sec-en">THE UNIFIED FRAMEWORK</div>
+
+    <div class="speech">
+      将三层合并，代入 T 的展开式，得到完整的统一方程：
+    </div>
+
+    <div class="formula">
+      G <span class="f-dim">=</span> S <span class="f-dim">·</span> A <span class="f-dim">·</span> [1 − (1 − <span class="f-hi">D</span>)<sup><span class="f-hi">n</span></sup>] <span class="f-dim">·</span> e<sup>−<span class="f-hi">H</span></sup> <span class="f-dim">/</span> P<sub style="font-size:0.6em" class="f-hi">bias</sub>
+    </div>
+
+    <div class="pause">— 让公式停留 3 秒 —</div>
+
+    <div class="speech">
+      这个方程描述的是：在 AI 决策层面，<strong>哪些因素决定了你被引用的概率</strong>。
+    </div>
+
+    <div class="speech">
+      分子部分——S、A、n、e⁻ᴴ——每一项都在增加 G；<br>
+      分母只有一项：<span class="hl-r">P_bias。</span>
+    </div>
+
+    <div class="speech">
+      注意 P_bias 出现了两次：<br>
+      一次在 e⁻ᴾ 项中压低了 T（信任的形成）；<br>
+      一次直接作为分母压低了 G（引用概率）。
+    </div>
+
+    <div class="key-line">
+      营销偏置的代价是双重的：<br>
+      它既破坏信任的积累，又直接摧毁引用的可能性。
+    </div>
+
+    <div class="speech">
+      这就是为什么我们把这套框架叫做「<strong>信任物理学</strong>」——<br>
+      因为它描述的不是营销技巧，而是 AI 时代的物理规律。<br>
+      违背它，投入多少预算都无法改变结果。
+    </div>
+  </div>
+
+  <!-- 06 执行优先级 -->
+  <div class="section" id="s6">
+    <div class="sec-meta">
+      <span class="sec-index">06</span>
+      <span class="sec-tag">执行 · Execution</span>
+      <span class="sec-time">17:00 — 19:00</span>
+    </div>
+    <div class="sec-title">执行优先级——<em>从哪里开始</em></div>
+    <div class="sec-en">WHERE TO START · ROI RANKING</div>
+
+    <div class="speech">
+      根据方程，五个变量的执行优先级如下：
+    </div>
+
+    <div class="priority">
+      <div class="pri-row header">
+        <div class="pri-cell">优先</div>
+        <div class="pri-cell">变量</div>
+        <div class="pri-cell">本周可做的第一步</div>
+        <div class="pri-cell">杠杆效应</div>
+        <div class="pri-cell">执行难度</div>
+      </div>
+      <div class="pri-row">
+        <div class="pri-cell pri-rank">#1</div>
+        <div class="pri-cell pri-var" style="color:var(--red)">P<sub style="font-size:0.55em">b</sub></div>
+        <div class="pri-cell" style="font-size:12px;">审查现有内容，删除无数据支撑的形容词；增加「不适合谁」的表述</div>
+        <div class="pri-cell"><div class="bar-wrap"><div class="bar-bg"><div class="bar-fg" style="width:100%;background:var(--red)"></div></div><span class="bar-val">极高</span></div></div>
+        <div class="pri-cell" style="font-size:12px;color:var(--green);">低（意识转变）</div>
+      </div>
+      <div class="pri-row">
+        <div class="pri-cell pri-rank">#2</div>
+        <div class="pri-cell pri-var">H</div>
+        <div class="pri-cell" style="font-size:12px;">将1篇现有文章中的定性表达全部替换为「数据+场景+可验证结论」</div>
+        <div class="pri-cell"><div class="bar-wrap"><div class="bar-bg"><div class="bar-fg" style="width:85%"></div></div><span class="bar-val">很高</span></div></div>
+        <div class="pri-cell" style="font-size:12px;color:var(--green);">低（写法调整）</div>
+      </div>
+      <div class="pri-row">
+        <div class="pri-cell pri-rank">#3</div>
+        <div class="pri-cell pri-var">S</div>
+        <div class="pri-cell" style="font-size:12px;">整理1个含前后数据对比的真实客户案例，发布到可被索引的平台</div>
+        <div class="pri-cell"><div class="bar-wrap"><div class="bar-bg"><div class="bar-fg" style="width:72%"></div></div><span class="bar-val">高</span></div></div>
+        <div class="pri-cell" style="font-size:12px;color:var(--amber);">中（需积累）</div>
+      </div>
+      <div class="pri-row">
+        <div class="pri-cell pri-rank">#4</div>
+        <div class="pri-cell pri-var">n</div>
+        <div class="pri-cell" style="font-size:12px;">选定 2 个核心平台，制定每周1次的固定发布节奏（内容复用链）</div>
+        <div class="pri-cell"><div class="bar-wrap"><div class="bar-bg"><div class="bar-fg" style="width:58%"></div></div><span class="bar-val">中高</span></div></div>
+        <div class="pri-cell" style="font-size:12px;color:var(--amber);">中（需节奏）</div>
+      </div>
+      <div class="pri-row">
+        <div class="pri-cell pri-rank">#5</div>
+        <div class="pri-cell pri-var">A</div>
+        <div class="pri-cell" style="font-size:12px;">联系1个行业媒体，投稿1篇有具体数据支撑的观点文章</div>
+        <div class="pri-cell"><div class="bar-wrap"><div class="bar-bg"><div class="bar-fg" style="width:45%"></div></div><span class="bar-val">中</span></div></div>
+        <div class="pri-cell" style="font-size:12px;color:var(--red);">高（需资源）</div>
+      </div>
+    </div>
+
+    <div class="speech">
+      建议的启动路径：<br>
+      <strong>第一周</strong>：专注 P_bias——零成本，立竿见影。<br>
+      <strong>第一个月</strong>：同步降低 H，发布第一个真实案例（S）。<br>
+      <strong>第一季度</strong>：建立稳定的内容节奏（n），开始布局权威背书（A）。
+    </div>
+  </div>
+
+  <!-- 07 结论 -->
+  <div class="section" id="s7">
+    <div class="sec-meta">
+      <span class="sec-index">07</span>
+      <span class="sec-tag">结论 · Conclusion</span>
+      <span class="sec-time">19:00 — 20:00</span>
+    </div>
+    <div class="sec-title">结论与<em>下一步</em></div>
+    <div class="sec-en">CONCLUSION · NEXT STEPS</div>
+
+    <div class="speech">
+      总结一下今天分享的核心逻辑：
+    </div>
+
+    <div class="speech">
+      AI 时代的营销竞争，本质上是一场<strong>信任评分的竞争</strong>。<br>
+      这个评分可以被计算，可以被优化，有明确的变量和优先级。
+    </div>
+
+    <div class="speech">
+      信任物理学给出的答案是：
+    </div>
+
+    <div class="key-line">
+      降低营销偏置（P↓）× 积累真实资产（S↑）× 建立权威背书（A↑）<br>
+      = AI 愿意持续为你背书
+    </div>
+
+    <div class="speech">
+      这不是一套需要大预算的方案。<br>
+      它需要的是<strong>认知的转变</strong>——从「说服」思维，切换到「建立信任」思维。
+    </div>
+
+    <div class="speech">
+      我们的工作，就是帮助您完成这个切换，<br>
+      并且把它落实到可执行的内容策略、可测量的 G 值提升上。
+    </div>
+
+    <div class="pause">— 停顿 —</div>
+
+    <div class="speech">
+      接下来，我建议我们做一件具体的事：<br>
+      <strong>对您目前的内容资产做一次信任物理学诊断</strong>——<br>
+      评估当前的 P_bias 水平、S 的规模与质量、H 的分布情况，<br>
+      给出一份可优先执行的变量改善清单。
+    </div>
+
+    <div class="speech">
+      这是我们合作的第一步，也是最有价值的一步。
+    </div>
+
+    <div class="note">
+      <div class="note-label">演讲者提示</div>
+      结束后直接问：「您目前的内容团队大概每月产出多少篇内容？其中有数据支撑的大概占多少比例？」——用数字引导客户自己发现诊断的必要性。
+    </div>
+  </div>
+
+</main>
+
+<script>
+// Timer
+let startTime = null;
+let elapsed = 0;
+let running = false;
+let interval = null;
+const TARGET = 20 * 60;
+
+function toggleTimer() {
+  if (!running) {
+    startTime = Date.now() - elapsed * 1000;
+    interval = setInterval(tick, 500);
+    running = true;
+    document.getElementById('timerBtn').textContent = '⏸ 暂停';
+    document.getElementById('timerBtn').classList.add('running');
+  } else {
+    clearInterval(interval);
+    running = false;
+    document.getElementById('timerBtn').textContent = '▶ 继续';
+    document.getElementById('timerBtn').classList.remove('running');
+  }
+}
+
+function tick() {
+  elapsed = Math.floor((Date.now() - startTime) / 1000);
+  const m = Math.floor(elapsed / 60);
+  const s = elapsed % 60;
+  document.getElementById('timerDisplay').textContent =
+    String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  const pct = Math.min(elapsed / TARGET * 100, 100);
+  const fill = document.getElementById('timerFill');
+  fill.style.width = pct + '%';
+  const remaining = TARGET - elapsed;
+  if (remaining <= 0) {
+    fill.style.background = '#8b2020';
+    document.getElementById('timerHint').textContent = '已超时 ' + Math.abs(Math.ceil(remaining/60)) + ' 分钟';
+  } else if (remaining <= 120) {
+    fill.style.background = '#b87c08';
+    document.getElementById('timerHint').textContent = '剩余 ' + Math.ceil(remaining/60) + ' 分钟 ⚠';
+  } else {
+    fill.style.background = '#1e5c38';
+    document.getElementById('timerHint').textContent = '剩余 ' + Math.ceil(remaining/60) + ' 分钟';
+  }
+}
+
+// Active nav on scroll
+const ids = ['s0','s1','s2','s3','s4','s5','s6','s7'];
+const navs = document.querySelectorAll('.nav-item');
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const i = ids.indexOf(e.target.id);
+      if (i >= 0) navs.forEach((n,j) => n.classList.toggle('active', i===j));
+    }
+  });
+}, { rootMargin: '-15% 0px -75% 0px' });
+
+ids.forEach(id => { const el = document.getElementById(id); if(el) obs.observe(el); });
+
+function goTo(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+</body>
+</html>
